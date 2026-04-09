@@ -1,0 +1,120 @@
+---
+title: "Configuring your CodeAura instance"
+description: "Environment variable reference for the CodeAura frontend and server, including URLs, Supabase credentials, port, and rate limiting."
+---
+
+CodeAura is configured entirely through environment variables — one set for the frontend build and one set for the server process. This page lists every variable, what it controls, and what you need to set it to for a working deployment.
+
+## Frontend environment variables
+
+The frontend is a Vite application. Vite injects variables prefixed with `VITE_` at build time, so you must set these before running `npm run build`. Create a `.env` file in the `frontend/` directory:
+
+```bash frontend/.env
+VITE_API_URL=https://your-api-domain.com
+```
+
+| Variable       | Required | Description                                                                                      |
+| -------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `VITE_API_URL` | Yes      | The base URL of your CodeAura API server. The frontend sends all requests to this address. |
+
+<Warning>
+`VITE_API_URL` is embedded into the compiled JavaScript bundle at build time. If you change it later, you must rebuild the frontend and redeploy the static files.
+</Warning>
+
+## Server environment variables
+
+The server reads its configuration from the process environment at runtime. Create a `.env` file in the `server/` directory (or inject the variables directly into your process manager or container):
+
+```bash server/.env
+# Supabase
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_KEY=your-service-role-key
+
+# URLs
+FRONTEND_URL=https://your-frontend-domain.com
+API_URL=https://your-api-domain.com
+
+# Server
+PORT=3000
+```
+
+| Variable               | Required | Default                    | Description                                                                                                                  |
+| ---------------------- | -------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `SUPABASE_URL`         | Yes      | —                          | The URL of your Supabase project, found in **Project Settings → API**.                                                       |
+| `SUPABASE_ANON_KEY`    | Yes      | —                          | The public anon key for your Supabase project. Used for client-facing operations.                                            |
+| `SUPABASE_SERVICE_KEY` | Yes      | —                          | The service role key for your Supabase project. Grants full database access — keep this secret and never expose it publicly. |
+| `FRONTEND_URL`         | Yes      | `http://localhost:5173`    | The origin of your frontend. The server uses this to configure CORS and only accepts requests from this origin.              |
+| `API_URL`              | Yes      | —                          | The public base URL of the API server itself. Used in generated links (for example, shareable snapshot URLs).                |
+| `PORT`                 | No       | `3000`                     | The port the HTTP server binds to.                                                                                           |
+
+## Connecting the frontend and server
+
+The two most important variables to get right are `VITE_API_URL` (frontend) and `FRONTEND_URL` (server). They must point at each other:
+
+- `VITE_API_URL` tells the frontend where to send API requests.
+- `FRONTEND_URL` tells the server which origin to allow in its CORS policy.
+
+If these values do not match, the browser will block all API requests with a CORS error.
+
+**Example:** if your frontend is at `https://codeaura.example.com` and your API is at `https://api.codeaura.example.com`:
+
+```bash frontend/.env
+VITE_API_URL=https://api.codeaura.example.com
+```
+
+```bash server/.env
+FRONTEND_URL=https://codeaura.example.com
+API_URL=https://api.codeaura.example.com
+```
+
+## Port configuration
+
+The server defaults to port `3000`. Override it by setting `PORT` in the server environment:
+
+```bash
+PORT=8080 bun run start
+```
+
+<Note>
+When running behind a reverse proxy (Nginx, Caddy, etc.), you can keep the server on `3000` internally and expose it on `443` via the proxy. The `FRONTEND_URL` and `API_URL` values should use the public-facing URLs, not the internal port.
+</Note>
+
+## Rate limiting
+
+The server applies a rate limit to all endpoints: **100 requests per 15 minutes per IP address**. This limit is enforced at the server level and cannot be configured via environment variables. The rate limit headers follow the `draft-6` standard and are included in every response.
+
+The IP address is read from the `x-forwarded-for` header first, then `x-real-ip`, so the limit applies correctly when the server is behind a reverse proxy. Make sure your proxy forwards these headers.
+
+<Warning>
+If you do not configure your reverse proxy to forward `x-forwarded-for` or `x-real-ip`, all requests will be attributed to the same "global" key and the rate limit will apply to your entire instance rather than per-user IP.
+</Warning>
+
+## Supabase credentials
+
+You can find all three Supabase values in your Supabase dashboard under **Project Settings → API**:
+
+- **Project URL** → `SUPABASE_URL`
+- **anon / public key** → `SUPABASE_ANON_KEY`
+- **service_role / secret key** → `SUPABASE_SERVICE_KEY`
+
+<Warning>
+Never commit your `SUPABASE_SERVICE_KEY` to version control. Treat it like a database root password — it bypasses all Supabase row-level security policies.
+</Warning>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Self-hosting overview" icon="server" href="/self-hosting/overview">
+    Step-by-step guide to cloning, building, and running CodeAura
+  </Card>
+  <Card title="API authentication" icon="lock" href="/api/authentication">
+    How requests are authenticated using Supabase-issued tokens
+  </Card>
+  <Card title="API overview" icon="code" href="/api/overview">
+    Explore the endpoints your self-hosted instance exposes
+  </Card>
+  <Card title="History & sessions" icon="clock-rotate-left" href="/guides/history-and-sessions">
+    How snapshot history and sessions are stored in Supabase
+  </Card>
+</CardGroup>

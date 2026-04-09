@@ -1,0 +1,75 @@
+---
+title: "CodeAura for Visual Studio Code"
+description: "Install the CodeAura VS Code extension to create beautiful code snapshots from any selection, directly in your editor without switching context."
+---
+
+The CodeAura VS Code extension brings snapshot creation into your editor. Select any code, trigger a single command, and a CodeAura panel opens beside your file with your selection pre-loaded and ready to customize.
+
+## Requirements
+
+- Visual Studio Code **1.85.0** or newer
+
+## Installation
+
+<Steps>
+  <Step title="Install from the VS Code Marketplace">
+    Open VS Code, go to the **Extensions** view (`Ctrl+Shift+X` / `Cmd+Shift+X`), and search for **CodeAura**. Click **Install**.
+  </Step>
+  <Step title="Or install from a VSIX file">
+    Download the `.vsix` package, then run **Extensions: Install from VSIX...** from the Command Palette and select the downloaded file.
+  </Step>
+</Steps>
+
+<Note>
+  After installation, no additional configuration is required. The extension activates automatically when you trigger the command.
+</Note>
+
+## Creating a snapshot
+
+<Steps>
+  <Step title="Select your code">
+    Highlight the lines you want to capture in the active editor. The command only becomes available when there is an active selection.
+  </Step>
+  <Step title="Trigger the command">
+    Use either method:
+
+    - **Right-click** the selection and choose **CodeAura: Create Snapshot from Selection** from the context menu.
+    - Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`), type `CodeAura`, and select **CodeAura: Create Snapshot from Selection**.
+  </Step>
+  <Step title="Customize and export in the panel">
+    A **CodeAura Snapshot** panel opens beside your editor with your selected code pre-loaded. The language is detected automatically from the open file. Use the panel to adjust the theme, background, font, and window style, then export or share your image.
+  </Step>
+</Steps>
+
+<Tip>
+  If you trigger the command again while the panel is already open, it updates the panel with the new selection instead of opening a second window.
+</Tip>
+
+## Signing in
+
+The panel includes a **Sign in** option that opens `codeaura.fun` in your browser to authenticate. Once you complete the OAuth flow, a token is sent back to VS Code automatically and your session is synced — no copy-pasting required.
+
+## Command reference
+
+| Command ID | Title | Available when |
+|---|---|---|
+| `codeaura.createSnapshot` | CodeAura: Create Snapshot from Selection | Editor has an active text selection |
+
+The command also appears in the editor context menu (right-click menu) whenever text is selected.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Editor guide" icon="pen-to-square" href="/guides/editor">
+    Learn how the CodeAura editor works and what languages are supported
+  </Card>
+  <Card title="Customization" icon="palette" href="/guides/customization">
+    Themes, backgrounds, fonts, and window styles
+  </Card>
+  <Card title="Export & sharing" icon="share-nodes" href="/guides/export-and-sharing">
+    Download as PNG, SVG, WebP, or share a link
+  </Card>
+  <Card title="Zed extension" icon="plug" href="/extensions/zed">
+    Use CodeAura from the Zed editor
+  </Card>
+</CardGroup>

@@ -1,0 +1,101 @@
+---
+title: "Writing and editing code in CodeAura"
+description: "Learn how the CodeAura editor works, including language detection, manual selection, tab size, word wrap, whitespace, and line number controls."
+---
+
+The CodeAura editor is the starting point for every code image you create. Paste or type any snippet and the editor immediately applies syntax highlighting — no configuration required. From there, a set of focused settings let you shape the code's presentation before you reach the design panels.
+
+## Entering your code
+
+Open CodeAura and type or paste your snippet directly into the editor canvas. The editor loads with a TypeScript example (`fibonacci.ts`) to give you a sense of the output. Select all and paste to replace it with your own code, or click **Clear** to start from a blank state.
+
+<Note>
+The editor uses CodeMirror under the hood. Standard keyboard shortcuts for your OS — cut, copy, paste, undo, redo, select-all — all work as expected.
+</Note>
+
+## Language selection and detection
+
+CodeAura automatically detects your programming language and activates the matching syntax highlighter. You can also pick a language manually from the language dropdown at the top of the editor.
+
+### Languages with full syntax highlighting
+
+The following languages have complete CodeMirror syntax support:
+
+<CardGroup cols={3}>
+  <Card title="JavaScript" icon="js" href="/guides/editor">JavaScript (including JSX)</Card>
+  <Card title="TypeScript" icon="code" href="/guides/editor">TypeScript (including TSX)</Card>
+  <Card title="Python" icon="python" href="/guides/editor">Python</Card>
+  <Card title="Rust" icon="gear" href="/guides/editor">Rust</Card>
+  <Card title="Java" icon="java" href="/guides/editor">Java</Card>
+  <Card title="C / C++" icon="code" href="/guides/editor">C and C++</Card>
+  <Card title="HTML" icon="html5" href="/guides/editor">HTML</Card>
+  <Card title="CSS" icon="css3-alt" href="/guides/editor">CSS</Card>
+  <Card title="JSON" icon="brackets-curly" href="/guides/editor">JSON</Card>
+  <Card title="Markdown" icon="markdown" href="/guides/editor">Markdown</Card>
+  <Card title="SQL" icon="database" href="/guides/editor">SQL</Card>
+  <Card title="XML" icon="code" href="/guides/editor">XML</Card>
+  <Card title="PHP" icon="php" href="/guides/editor">PHP</Card>
+</CardGroup>
+
+### Display-only languages
+
+The following languages appear in the language selector and set the correct label on your image, but the editor renders them in plain-text mode without token-level colouring. Syntax colours are still applied by the theme — only the token classification is skipped.
+
+<AccordionGroup>
+  <Accordion title="Systems and compiled">
+    Go, Swift, Kotlin, C#, Dart, Haskell, Zig, Nim, Elixir, Erlang, OCaml, F#, Scala, Clojure
+  </Accordion>
+  <Accordion title="Scripting and shell">
+    Ruby, Lua, Perl, R, Shell/Bash, PowerShell
+  </Accordion>
+  <Accordion title="Web and markup">
+    JSX, TSX, Vue SFC, Svelte, SCSS, LESS, GraphQL, YAML, TOML, NGINX, LaTeX
+  </Accordion>
+  <Accordion title="Infrastructure and tooling">
+    Dockerfile, Terraform, Makefile, INI, Diff, Regex
+  </Accordion>
+  <Accordion title="Other">
+    Solidity, GLSL/WGSL, Nix, Gleam, Assembly (x86)
+  </Accordion>
+</AccordionGroup>
+
+## Editor settings
+
+These settings control how your code is rendered inside the editor. They are found in the editor toolbar above the code area.
+
+### Tab size
+
+Sets the number of spaces used to represent a tab character. The default is **2**. Changing this value re-renders existing indentation in the editor without modifying the underlying code.
+
+### Word wrap
+
+When off (the default), long lines extend horizontally and a scrollbar appears. Toggle **Word wrap** on to break long lines at the editor boundary — useful for wide prose or long strings that you want fully visible in a fixed-width image.
+
+### Show whitespace
+
+Renders visible markers for spaces and tab characters. Useful when you want to verify indentation or demonstrate whitespace-sensitive syntax (e.g. Python, YAML, Makefile) in your image.
+
+### Show indent guides
+
+Draws faint vertical lines at each indentation level. Indent guides help viewers follow nested code structure, particularly in deeply indented blocks.
+
+### File name
+
+The file name field (default: `untitled`) appears in the window title bar when **Show title** is enabled on the Frame panel. Changing it to a real file name — such as `api.ts` or `main.py` — adds authenticity to the image.
+
+## Line count
+
+CodeAura displays a live line count below the editor. This updates as you type and gives you a quick read on whether your snippet fits comfortably in the chosen frame width.
+
+## Next steps
+
+Once your code is in the editor, move to the customization panels to style the image:
+
+<CardGroup cols={2}>
+  <Card title="Customizing your code image" icon="palette" href="/guides/customization">
+    Set the theme, background, frame, and font for your image
+  </Card>
+  <Card title="Exporting and sharing" icon="share" href="/guides/export-and-sharing">
+    Download as PNG, SVG, WebP, or generate a shareable link
+  </Card>
+</CardGroup>

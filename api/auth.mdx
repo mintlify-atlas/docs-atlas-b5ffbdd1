@@ -1,0 +1,145 @@
+---
+title: "Auth API — GitHub OAuth and user sessions"
+description: "Start the GitHub OAuth flow, handle the callback automatically, get current user info, and end sessions with the CodeAura Auth API."
+---
+
+The Auth API manages identity via GitHub OAuth, backed by Supabase Auth. You initiate the flow by redirecting the user to `/auth/github` — the rest of the OAuth exchange (GitHub callback, code-for-token swap, and redirect back to your app) is handled automatically by the server.
+
+<Tip>
+  Once you have an `access_token`, pass it as `Authorization: Bearer <access_token>` on all protected requests. See the [authentication guide](/api/authentication) for details.
+</Tip>
+
+---
+
+## Start GitHub OAuth
+
+```
+GET /auth/github
+```
+
+Redirects the user to GitHub's OAuth consent screen. No request body or headers are needed. The OAuth scopes requested are `read:user` and `user:email`.
+
+This endpoint is public — no token required.
+
+### Example
+
+```bash
+# Open this URL in a browser or redirect your user to it
+curl --location --request GET https://your-domain/auth/github
+```
+
+The server returns a `302 Found` redirect to GitHub. After the user approves, GitHub redirects back to `/auth/callback`.
+
+---
+
+## OAuth callback
+
+```
+GET /auth/callback
+```
+
+This endpoint is called automatically by GitHub after the user authorizes the app. You do not call it directly — the server handles the code exchange and redirects the user back to the frontend with their tokens.
+
+The redirect URL includes these query parameters:
+
+| Parameter | Description |
+|---|---|
+| `access_token` | The Bearer token to use in subsequent API requests. |
+| `refresh_token` | Use to refresh the session when `access_token` expires. |
+| `user_id` | The Supabase user UUID. |
+| `user_name` | The user's GitHub username. |
+| `full_name` | The user's display name from GitHub. |
+| `avatar_url` | URL of the user's GitHub avatar. |
+| `email` | The user's email address, if available. |
+
+If the OAuth exchange fails, the callback redirects to the frontend with an `auth_error` query parameter:
+
+| `auth_error` value | Cause |
+|---|---|
+| `missing_code` | GitHub did not provide an authorization code. |
+| `exchange_failed` | Supabase could not exchange the code for a session. |
+| `server_error` | An unexpected error occurred during the callback. |
+
+---
+
+## Get current user
+
+```
+GET /auth/me
+```
+
+Returns the profile of the currently authenticated user. Requires a valid Bearer token.
+
+### Response
+
+<ResponseField name="id" type="string" required>
+  The Supabase UUID of the authenticated user.
+</ResponseField>
+
+<ResponseField name="login" type="string" required>
+  The user's GitHub username (sourced from `user_name` or `preferred_username` in the OAuth metadata).
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  The user's display name from GitHub (`full_name`). `null` if not set.
+</ResponseField>
+
+<ResponseField name="avatarUrl" type="string" required>
+  URL of the user's GitHub avatar image.
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The user's email address. `null` if GitHub did not provide one.
+</ResponseField>
+
+### Example
+
+```bash
+curl --request GET \
+  --url https://your-domain/auth/me \
+  --header "Authorization: Bearer <access_token>"
+```
+
+```json
+{
+  "id": "u1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "login": "arinzejustin",
+  "name": "Justin Arinze",
+  "avatarUrl": "https://avatars.githubusercontent.com/u/12345678",
+  "email": "justin@example.com"
+}
+```
+
+---
+
+## Log out
+
+```
+POST /auth/logout
+```
+
+Ends the current session by revoking the access token server-side via Supabase Auth admin APIs. After a successful logout, the token is immediately invalid — any subsequent requests using it will receive `401 Unauthorized`. Requires a valid Bearer token.
+
+### Response
+
+<ResponseField name="success" type="boolean" required>
+  Always `true` when the logout request is processed. If the token was already expired or revoked, the server still returns `{ "success": true }`.
+</ResponseField>
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://your-domain/auth/logout \
+  --header "Authorization: Bearer <access_token>"
+```
+
+```json
+{
+  "success": true
+}
+```
+
+<Warning>
+  Logging out invalidates only the specific `access_token` passed in the request. If the user has active sessions on other devices, those tokens remain valid until they expire or are explicitly revoked.
+</Warning>

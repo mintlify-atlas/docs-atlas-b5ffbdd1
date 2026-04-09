@@ -1,0 +1,56 @@
+---
+title: "CodeAura API overview"
+description: "Learn the base URL, authentication model, and rate limits for the CodeAura REST API, plus an overview of the Snapshots, History, and Auth endpoint groups."
+---
+
+The CodeAura API is a JSON-over-HTTP API that lets you create shareable code snapshots, manage session history, and authenticate users — the same operations the web app uses under the hood. You can call it directly from your own tooling, CI pipelines, or editor extensions.
+
+## Base URL
+
+All API requests are made to your CodeAura server. For self-hosted deployments, replace the placeholder with your own domain:
+
+```
+https://your-domain/
+```
+
+The hosted version of CodeAura is available at `https://codeaura.fun`.
+
+## Response format
+
+Every endpoint returns `application/json`. Successful responses include the relevant resource fields. Error responses always carry an `error` string:
+
+```json
+{
+  "error": "Missing or invalid Authorization header"
+}
+```
+
+## Rate limiting
+
+The API enforces a limit of **100 requests per 15-minute window**, keyed by client IP address (using the `X-Forwarded-For` or `X-Real-IP` header). The response includes standard `RateLimit-*` headers (`draft-6` format) so you can track your remaining quota.
+
+When you exceed the limit, the server responds with `429 Too Many Requests`.
+
+## Authentication
+
+Authentication is **optional** for snapshot creation — anonymous users can share code without signing in. It is **required** for all history and user-session endpoints.
+
+Tokens are obtained through GitHub OAuth and passed as a Bearer token in the `Authorization` header. See the authentication page for full details.
+
+<Card title="Authentication" icon="key" href="/api/authentication">
+  Learn how to obtain a token via GitHub OAuth and include it in API requests.
+</Card>
+
+## Endpoint groups
+
+<CardGroup cols={3}>
+  <Card title="Snapshots" icon="camera" href="/api/snapshots">
+    Create shareable code image links and retrieve existing snapshots by short code.
+  </Card>
+  <Card title="History" icon="clock" href="/api/history">
+    List, sync, and delete saved code sessions tied to the authenticated user.
+  </Card>
+  <Card title="Auth" icon="user" href="/api/auth">
+    Start GitHub OAuth, get current user info, and end sessions.
+  </Card>
+</CardGroup>

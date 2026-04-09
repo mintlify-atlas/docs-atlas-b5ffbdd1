@@ -1,0 +1,125 @@
+---
+title: "Self-hosting CodeAura"
+description: "Deploy your own CodeAura instance: a Vue/Vite SPA and a Hono/Bun backend API, both connected to a Supabase project for auth and database storage."
+---
+
+Self-hosting CodeAura gives you full control over your deployment — your data stays on your infrastructure, and you can configure the instance to suit your environment. A complete deployment consists of two pieces: a static frontend built with Vue and Vite, and a backend API server built with Hono running on Bun.
+
+## Architecture
+
+The frontend is a single-page application that communicates exclusively with the backend API. The server handles authentication, snapshot storage, and session history using Supabase as both the auth provider and database. Neither the frontend nor the server store any state on disk; everything is persisted in Supabase.
+
+```
+Browser (Vue SPA)
+      │
+      │  HTTP / REST
+      ▼
+CodeAura API (Hono on Bun)
+      │
+      │  Supabase JS client
+      ▼
+Supabase (Auth + Database)
+```
+
+<Note>
+The frontend must be served over HTTPS in production so that Supabase auth callbacks work correctly. The API server can be placed behind a reverse proxy such as Nginx or Caddy.
+</Note>
+
+## Prerequisites
+
+Before you deploy, make sure you have the following ready:
+
+- **Bun** — the server runs on [Bun](https://bun.sh). Install it with `curl -fsSL https://bun.sh/install | bash`.
+- **Node.js 18+** — required to build the frontend with Vite (`vue-tsc && vite build`).
+- **A Supabase project** — sign up at [supabase.com](https://supabase.com) and create a new project. You will need the project URL, the anon key, and the service role key.
+- **A domain or hostname** for both the frontend and the API, so you can set `FRONTEND_URL` and `VITE_API_URL` correctly.
+
+## Deployment steps
+
+<Steps>
+  <Step title="Clone the repository">
+    Clone the CodeAura repository to your server:
+
+    ```bash
+    git clone https://github.com/arinzejustin/codeaura.git
+    cd codeaura
+    ```
+  </Step>
+
+  <Step title="Configure environment variables">
+    Create `.env` files for both the frontend and the server using the provided examples:
+
+    ```bash
+    cp frontend/.env.example frontend/.env
+    cp server/.env.example server/.env
+    ```
+
+    Fill in the values for your Supabase project, your frontend URL, and your API URL. See [Configuring your CodeAura instance](/self-hosting/configuration) for a full reference of every variable.
+  </Step>
+
+  <Step title="Build the frontend">
+    Install dependencies and build the Vue app into static files:
+
+    ```bash
+    cd frontend
+    npm install
+    npm run build
+    ```
+
+    The compiled output lands in `frontend/dist/`. Serve this directory with any static file host, CDN, or your reverse proxy.
+  </Step>
+
+  <Step title="Start the API server">
+    Install server dependencies and start the Hono server:
+
+    ```bash
+    cd server
+    bun install
+    bun run start
+    ```
+
+    The server listens on port `3000` by default. You can override this with the `PORT` environment variable.
+
+    <Tip>
+    For production use, run the server with a process manager such as `pm2` or as a `systemd` service to ensure it restarts on failure.
+    </Tip>
+  </Step>
+
+  <Step title="Verify the deployment">
+    Send a request to the API root to confirm the server is running:
+
+    ```bash
+    curl https://your-api-domain.com/
+    ```
+
+    A healthy server returns:
+
+    ```json
+    {
+      "name": "CodeAura API",
+      "version": "1.0.0",
+      "status": "ok",
+      "timestamp": "..."
+    }
+    ```
+
+    Then open your frontend URL in a browser and confirm the editor loads.
+  </Step>
+</Steps>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Configuration reference" icon="sliders" href="/self-hosting/configuration">
+    Full reference for every environment variable on the frontend and server
+  </Card>
+  <Card title="API overview" icon="code" href="/api/overview">
+    Explore the REST API your self-hosted instance exposes
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api/authentication">
+    How the server authenticates requests using Supabase tokens
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Get familiar with CodeAura as an end user before deploying
+  </Card>
+</CardGroup>

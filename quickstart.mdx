@@ -1,80 +1,72 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: "Get started with CodeAura"
+description: "Learn how to create your first code snapshot with CodeAura in four steps: paste code, choose a theme, style the frame, then export or share."
 ---
 
-## Get started in three steps
+This guide walks you through creating your first code snapshot with CodeAura. You will go from a blank editor to a polished, exportable image in under two minutes — no account or installation required.
 
-Get your documentation site running locally and make your first customization.
+<Steps>
+  <Step title="Open CodeAura">
+    Navigate to the CodeAura web app in your browser. The editor opens immediately with a sample TypeScript snippet pre-loaded so you can see what a finished snapshot looks like before you add your own code.
 
-### Step 1: Set up your local environment
+    <Tip>
+      CodeAura saves your work to local history automatically. You can close the tab and pick up exactly where you left off when you return.
+    </Tip>
+  </Step>
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="Add your code">
+    Click inside the editor and replace the sample code with your own snippet, or paste it directly with **Ctrl+V** / **Cmd+V**.
 
-### Step 2: Deploy your changes
+    CodeAura detects your programming language automatically and applies syntax highlighting. If the detection is wrong, use the language dropdown at the top of the editor to select the correct language from the full list of 50+ options.
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    You can also set a file name (for example `main.go`) in the file name field above the editor. This name appears in the window title bar of your snapshot.
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    <Note>
+      Languages with full CodeMirror support — including JavaScript, TypeScript, Python, Rust, Java, C++, HTML, CSS, JSON, SQL, PHP, and more — receive active syntax highlighting. All other languages are recognized for labeling but render in plain text mode.
+    </Note>
+  </Step>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="Customize the appearance">
+    Use the panels on the right side of the editor to style your snapshot:
 
-### Step 3: Go live
+    - **Theme** — Pick from 25 themes across four categories: dark (Dracula, One Dark Pro, Tokyo Night, Catppuccin Mocha, Nord, and more), light (GitHub Light, Solarized Light, One Light, and more), high contrast (GitHub Dark HC, Pitch Black, Cobalt2), and retro (Amber Terminal, Vaporwave, Hacker (Matrix)).
+    - **Background** — Choose a gradient, a solid color, or a transparent background.
+    - **Frame** — Adjust the padding around your code, toggle the macOS-style window controls, and set the drop shadow depth.
+    - **Font** — Select a developer-friendly font and tune the font size, line height, and weight.
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    The preview updates live as you make changes.
 
-## Next steps
+    <Tip>
+      Significant changes — like switching the language or replacing the code — create a new history entry. Style tweaks like adjusting padding or switching themes update your current entry in place, keeping your history clean.
+    </Tip>
+  </Step>
 
-Now that you have your docs running, explore these key features:
+  <Step title="Export or share">
+    When your snapshot looks the way you want, open the **Export** menu and choose how to save or share it:
+
+    - **Download** — Save the image to your computer as PNG, JPEG, SVG, or WebP. The default scale is 2× for sharp, high-resolution output.
+    - **Copy to clipboard** — Copy the image directly so you can paste it into a chat, email, or slide deck.
+    - **Shareable link** — Generate a unique URL so anyone can open and remix your snapshot. Sign in to make the link persistent across devices.
+
+    <Note>
+      Shareable links require a free CodeAura account. Downloaded images are available without signing in.
+    </Note>
+  </Step>
+</Steps>
+
+## What's next
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Customization guide" icon="sliders" href="/guides/customization">
+    Learn every customization option — backgrounds, frames, fonts, and themes — in depth.
+  </Card>
+  <Card title="Export and sharing" icon="share" href="/guides/export-and-sharing">
+    Understand export formats, resolution settings, and how shareable links work.
+  </Card>
+  <Card title="History and sessions" icon="clock" href="/guides/history-and-sessions">
+    Learn how CodeAura auto-saves your work and how to manage your session history.
+  </Card>
+  <Card title="VS Code extension" icon="puzzle" href="/extensions/vscode">
+    Create snapshots without leaving VS Code using the CodeAura extension.
+  </Card>
 </CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

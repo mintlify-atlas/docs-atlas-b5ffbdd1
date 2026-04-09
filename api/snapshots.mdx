@@ -1,0 +1,221 @@
+---
+title: "Snapshots API — create and retrieve code images"
+description: "POST /snapshots to create shareable code image links with full styling config. GET /snapshots/:code to retrieve snapshots by their 8-character short code."
+---
+
+Snapshots are the core resource in CodeAura. A snapshot captures a code string, its language, and the full visual configuration used to render it. When you create a snapshot, the API returns a unique short code and a ready-to-share URL. Authentication is optional — both signed-in users and anonymous callers can create snapshots.
+
+---
+
+## Create a snapshot
+
+```
+POST /snapshots
+```
+
+Creates a new snapshot and returns a shareable URL. If a valid Bearer token is provided, the snapshot is associated with the authenticated user. Anonymous snapshots are stored without a user ID.
+
+### Request body
+
+<ParamField body="code" type="string" required>
+  The source code to render. Any length is accepted, though very long files may produce oversized images.
+</ParamField>
+
+<ParamField body="language" type="string" required>
+  The programming language identifier used for syntax highlighting (e.g. `"typescript"`, `"python"`, `"rust"`).
+</ParamField>
+
+<ParamField body="config" type="object" required>
+  Visual configuration for the snapshot.
+
+  <Expandable title="config properties">
+    <ParamField body="config.themeId" type="string" required>
+      The ID of the color theme to apply (e.g. `"github-dark"`, `"nord"`).
+    </ParamField>
+    <ParamField body="config.fontId" type="string" required>
+      The ID of the font to use for the code block (e.g. `"fira-code"`, `"jetbrains-mono"`).
+    </ParamField>
+    <ParamField body="config.fontSize" type="number" required>
+      Font size in pixels.
+    </ParamField>
+    <ParamField body="config.lineHeight" type="number" required>
+      Line height as a unitless multiplier (e.g. `1.5`).
+    </ParamField>
+    <ParamField body="config.padding" type="number" required>
+      Outer padding around the window frame, in pixels.
+    </ParamField>
+    <ParamField body="config.innerPadding" type="number" required>
+      Inner padding inside the code window, in pixels.
+    </ParamField>
+    <ParamField body="config.borderRadius" type="number" required>
+      Corner radius of the window frame, in pixels.
+    </ParamField>
+    <ParamField body="config.width" type="number" required>
+      Width of the rendered image in pixels.
+    </ParamField>
+    <ParamField body="config.windowStyle" type="string" required>
+      Window chrome style. Accepted values: `"macos-dark"`, `"macos-light"`, `"windows-11"`, `"terminal"`, `"minimal"`, `"none"`.
+    </ParamField>
+    <ParamField body="config.showLineNumbers" type="boolean" required>
+      Whether to render line numbers in the gutter.
+    </ParamField>
+    <ParamField body="config.shadow" type="string" required>
+      CSS `box-shadow` string for the drop shadow beneath the window frame (e.g. `"0 20px 60px rgba(0,0,0,0.5)"`). Pass `"none"` to disable the shadow.
+    </ParamField>
+    <ParamField body="config.bgType" type="string" required>
+      Background fill type. Accepted values: `"solid"`, `"gradient"`, `"none"` (transparent).
+    </ParamField>
+    <ParamField body="config.bgColor" type="string">
+      Background color as a CSS color string (e.g. `"#1a1b26"`). Used when `bgType` is `"solid"`.
+    </ParamField>
+    <ParamField body="config.bgGradient" type="string">
+      CSS gradient string (e.g. `"linear-gradient(135deg, #667eea, #764ba2)"`). Used when `bgType` is `"gradient"`.
+    </ParamField>
+    <ParamField body="config.showTitle" type="boolean" required>
+      Whether to display the window title bar.
+    </ParamField>
+    <ParamField body="config.windowTitle" type="string" required>
+      Text shown in the window title bar. Can be an empty string if `showTitle` is `false`.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="string" required>
+  The database UUID of the newly created snapshot.
+</ResponseField>
+
+<ResponseField name="shortCode" type="string" required>
+  An 8-character nanoid that uniquely identifies the snapshot (e.g. `"aB3xZ9qW"`).
+</ResponseField>
+
+<ResponseField name="shareUrl" type="string" required>
+  The full shareable URL for viewing the snapshot (e.g. `"https://codeaura.fun/s/aB3xZ9qW"`).
+</ResponseField>
+
+<ResponseField name="createdAt" type="string" required>
+  ISO 8601 timestamp of when the snapshot was created.
+</ResponseField>
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://your-domain/snapshots \
+  --header "Content-Type: application/json" \
+  --data '{
+    "code": "const greet = (name: string) => `Hello, ${name}!`",
+    "language": "typescript",
+    "config": {
+      "themeId": "github-dark",
+      "fontId": "fira-code",
+      "fontSize": 14,
+      "lineHeight": 1.5,
+      "padding": 32,
+      "innerPadding": 16,
+      "borderRadius": 12,
+      "width": 800,
+      "windowStyle": "macos-dark",
+      "showLineNumbers": true,
+      "shadow": "0 20px 60px rgba(0,0,0,0.5)",
+      "bgType": "gradient",
+      "bgGradient": "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
+      "showTitle": true,
+      "windowTitle": "greet.ts"
+    }
+  }'
+```
+
+```json
+{
+  "id": "c7a3f1d2-84be-4e91-b0d3-9f21a7e6c345",
+  "shortCode": "aB3xZ9qW",
+  "shareUrl": "https://codeaura.fun/s/aB3xZ9qW",
+  "createdAt": "2024-11-15T10:32:00.000Z"
+}
+```
+
+---
+
+## Get a snapshot
+
+```
+GET /snapshots/:code
+```
+
+Returns a snapshot by its short code. This endpoint is public — no authentication required. Each successful request increments the snapshot's view counter.
+
+### Path parameters
+
+<ParamField path="code" type="string" required>
+  The 8-character short code returned when the snapshot was created.
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="string" required>
+  The database UUID of the snapshot.
+</ResponseField>
+
+<ResponseField name="code" type="string" required>
+  The raw source code stored in the snapshot.
+</ResponseField>
+
+<ResponseField name="language" type="string" required>
+  The language identifier for syntax highlighting.
+</ResponseField>
+
+<ResponseField name="config" type="object" required>
+  The full visual configuration used to render the snapshot. Contains the same fields as the `config` object in the create request.
+</ResponseField>
+
+<ResponseField name="views" type="number" required>
+  Total number of times this snapshot has been retrieved.
+</ResponseField>
+
+<ResponseField name="createdAt" type="string" required>
+  ISO 8601 timestamp of when the snapshot was created.
+</ResponseField>
+
+### Example
+
+```bash
+curl --request GET \
+  --url https://your-domain/snapshots/aB3xZ9qW
+```
+
+```json
+{
+  "id": "c7a3f1d2-84be-4e91-b0d3-9f21a7e6c345",
+  "code": "const greet = (name: string) => `Hello, ${name}!`",
+  "language": "typescript",
+  "config": {
+    "themeId": "github-dark",
+    "fontId": "fira-code",
+    "fontSize": 14,
+    "lineHeight": 1.5,
+    "padding": 32,
+    "innerPadding": 16,
+    "borderRadius": 12,
+    "width": 800,
+    "windowStyle": "macos-dark",
+    "showLineNumbers": true,
+    "shadow": "0 20px 60px rgba(0,0,0,0.5)",
+    "bgType": "gradient",
+    "bgGradient": "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
+    "showTitle": true,
+    "windowTitle": "greet.ts"
+  },
+  "views": 42,
+  "createdAt": "2024-11-15T10:32:00.000Z"
+}
+```
+
+If no snapshot exists for the given code, the API returns `404 Not Found`:
+
+```json
+{
+  "error": "Snapshot not found"
+}
+```

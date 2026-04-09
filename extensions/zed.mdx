@@ -1,0 +1,51 @@
+---
+title: "CodeAura for Zed"
+description: "The CodeAura Zed extension is in early development — the scaffold is in place but commands are not yet implemented. Track its progress here."
+---
+
+CodeAura is building a native extension for the [Zed](https://zed.dev) editor. The extension is in early development — the source is structured and in place, but no commands or features have been implemented yet.
+
+<Note>
+  This page will be updated as the Zed extension gains functionality. If you need CodeAura in your editor today, the [VS Code extension](/extensions/vscode) is fully available.
+</Note>
+
+## Current status
+
+The extension is scaffolded as a Rust crate (`extensions/zed/src/lib.rs`) following Zed's extension API. No commands or UI contributions are implemented in this release.
+
+| Feature | Status |
+|---|---|
+| Extension scaffold | In place |
+| Create snapshot command | Not yet implemented |
+| Webview panel | Not yet implemented |
+| Authentication flow | Not yet implemented |
+
+## What to expect
+
+When the Zed extension reaches feature parity with the VS Code extension, it will provide:
+
+- A **Create Snapshot from Selection** command accessible from the command palette and context menu
+- An in-editor panel with the full CodeAura editor pre-loaded with your selection
+- Language auto-detection based on the open file's syntax
+- A sign-in flow that completes in the browser and syncs back to the editor automatically
+
+## Stay up to date
+
+Watch the [CodeAura GitHub repository](https://github.com/arinzejustin/codeaura) for progress on the Zed extension. Contributions to the Rust extension crate are welcome.
+
+## In the meantime
+
+<CardGroup cols={2}>
+  <Card title="VS Code extension" icon="plug" href="/extensions/vscode">
+    The fully featured extension for Visual Studio Code — available now
+  </Card>
+  <Card title="Quick start" icon="rocket" href="/quickstart">
+    Use CodeAura in the browser without any editor extension
+  </Card>
+  <Card title="Export & sharing" icon="share-nodes" href="/guides/export-and-sharing">
+    Download or share your snapshot directly from the web app
+  </Card>
+  <Card title="API reference" icon="code" href="/api/overview">
+    Integrate CodeAura snapshots programmatically into your own tools
+  </Card>
+</CardGroup>

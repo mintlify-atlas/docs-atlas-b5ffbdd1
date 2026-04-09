@@ -1,0 +1,84 @@
+---
+title: "Authenticating with the CodeAura API"
+description: "Get a Bearer token via GitHub OAuth and pass it in the Authorization header to access protected endpoints like history and user sessions."
+---
+
+The CodeAura API uses **Bearer token authentication**. Tokens are issued by Supabase Auth after a successful GitHub OAuth flow and must be included in the `Authorization` header on every protected request.
+
+## Getting a token
+
+Authentication starts by directing the user to GitHub via the `GET /auth/github` endpoint. The server redirects to GitHub, which then redirects back to the app's OAuth callback with a short-lived code. The callback handler exchanges that code for a session and returns the `access_token` in the redirect URL.
+
+<Steps>
+  <Step title="Initiate OAuth">
+    Navigate to or redirect the user to:
+    ```
+    GET /auth/github
+    ```
+    The server immediately redirects to GitHub's OAuth consent screen.
+  </Step>
+  <Step title="Handle the callback">
+    After the user approves, GitHub redirects to `/auth/callback`. The server exchanges the authorization code for a session and redirects to the frontend with the following query parameters:
+    - `access_token` — the Bearer token to use in API requests
+    - `refresh_token` — use to obtain a new `access_token` when it expires
+    - `user_id`, `user_name`, `full_name`, `avatar_url`, `email` — user metadata
+  </Step>
+  <Step title="Store the token">
+    Store the `access_token` securely. For browser-based clients, avoid `localStorage` in sensitive contexts — prefer an in-memory store or a secure cookie.
+  </Step>
+</Steps>
+
+## Including the token in requests
+
+Pass the token in the `Authorization` header as a Bearer credential:
+
+```bash
+curl https://your-domain/auth/me \
+  --header "Authorization: Bearer <access_token>"
+```
+
+The header must start with `Bearer ` (note the space). Requests that omit the header or use a different scheme receive a `401` response.
+
+## Endpoint access levels
+
+| Endpoint | Auth required |
+|---|---|
+| `POST /snapshots` | No (optional — associates snapshot with user if provided) |
+| `GET /snapshots/:code` | No |
+| `GET /auth/github` | No |
+| `GET /auth/callback` | No |
+| `GET /auth/me` | **Yes** |
+| `POST /auth/logout` | **Yes** |
+| `GET /history` | **Yes** |
+| `POST /history/sync` | **Yes** |
+| `DELETE /history/:id` | **Yes** |
+
+## Error responses
+
+When a protected endpoint receives a missing or invalid token, it returns `401 Unauthorized`:
+
+```json
+{
+  "error": "Missing or invalid Authorization header"
+}
+```
+
+If the token is present but expired or tampered with:
+
+```json
+{
+  "error": "Invalid or expired token"
+}
+```
+
+If an unexpected error occurs while validating the token:
+
+```json
+{
+  "error": "Authentication failed"
+}
+```
+
+<Info>
+  Tokens are validated against Supabase Auth on every request. There is no local token cache — if you revoke a session via `POST /auth/logout`, the token is immediately invalid.
+</Info>

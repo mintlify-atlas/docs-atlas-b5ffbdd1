@@ -1,0 +1,83 @@
+{
+  "projectType": "saas",
+  "projectName": "CodeAura",
+  "projectDescription": "A web-based tool that lets developers turn code snippets into stunning, customizable images and share them via shareable links or direct export.",
+  "theme": "willow",
+  "primaryColor": "#6366f1",
+  "lightColor": "#a855f7",
+  "darkColor": "#1a1b26",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Using CodeAura",
+            "pages": [
+              "guides/editor",
+              "guides/customization",
+              "guides/export-and-sharing",
+              "guides/history-and-sessions"
+            ]
+          },
+          {
+            "group": "Extensions",
+            "pages": [
+              "extensions/vscode",
+              "extensions/zed"
+            ]
+          },
+          {
+            "group": "Self-Hosting",
+            "pages": [
+              "self-hosting/overview",
+              "self-hosting/configuration"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["api/overview", "api/authentication"]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api/snapshots",
+              "api/history",
+              "api/auth"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Live code editor with syntax highlighting for 20+ languages",
+    "Highly customizable appearance: themes, backgrounds, fonts, window styles",
+    "Export as PNG, JPEG, SVG, or WebP at configurable scale",
+    "Shareable snapshot links for viewing and remixing code images",
+    "Session history with automatic save and cross-device sync (when signed in)",
+    "GitHub OAuth authentication via Supabase",
+    "VS Code and Zed editor extensions for creating snapshots from selections",
+    "Transparent background support for flexible use in presentations"
+  ],
+  "publicApiSurface": [
+    "POST /snapshots — Create a shared snapshot (auth optional)",
+    "GET /snapshots/:code — Retrieve a snapshot by short code",
+    "GET /auth/github — Initiate GitHub OAuth flow",
+    "GET /auth/callback — Handle OAuth callback",
+    "GET /auth/me — Get current authenticated user",
+    "POST /auth/logout — Invalidate current session",
+    "GET /history — List history entries for authenticated user",
+    "POST /history/sync — Sync local history entries to server",
+    "DELETE /history/:id — Delete a history entry"
+  ]
+}

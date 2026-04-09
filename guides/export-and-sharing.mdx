@@ -1,0 +1,120 @@
+---
+title: "Exporting and sharing code images"
+description: "Download your code image as PNG, JPEG, SVG, or WebP, copy it to the clipboard, or generate a shareable link others can view and remix."
+---
+
+Once your code image looks the way you want it, CodeAura gives you several ways to get it out into the world. You can download a file, copy the image directly to your clipboard, or generate a permanent shareable link — all from the **Export** menu.
+
+## Export formats
+
+CodeAura supports four output formats. Select your format in the Export panel before downloading.
+
+<Tabs>
+  <Tab title="PNG">
+    The default format. PNG is lossless and supports transparency, making it the best choice for most use cases — blog posts, social media cards, slide decks, and documentation screenshots.
+
+    **Transparent background**: Enable the **Transparent background** toggle to export on a transparent canvas. This is useful when you want to composite the image on top of a custom background elsewhere.
+  </Tab>
+  <Tab title="JPEG">
+    A compressed, smaller file suitable for situations where file size matters more than perfect fidelity or transparency. JPEG does not support transparency — the background is rendered as white if you have no background colour set.
+
+    Use the **JPEG quality** slider (default: `90`) to balance file size against image quality. Values above `85` are generally indistinguishable from lossless at typical viewing sizes.
+  </Tab>
+  <Tab title="SVG">
+    Exports the image as a scalable vector. SVG files are resolution-independent, so they look sharp at any size — ideal for embedding in websites or design tools.
+  </Tab>
+  <Tab title="WebP">
+    A modern format that offers smaller file sizes than PNG while retaining transparency support. WebP is supported in all modern browsers and is a good default for web publishing when you want smaller payloads.
+  </Tab>
+</Tabs>
+
+## Scale / resolution
+
+The **Scale** setting multiplies the canvas resolution at export time. A higher scale produces a larger, sharper file.
+
+| Scale | Description |
+|---|---|
+| 1× | Screen resolution — smallest file size |
+| 2× | Retina / HiDPI — default, recommended for most uses |
+| 3× | Very high resolution — best for print or large displays |
+| 4× | Maximum resolution |
+
+The default scale is **2×**. For social media and documentation, 2× is sufficient and keeps file sizes manageable.
+
+## File naming
+
+Downloaded files use the template:
+
+```
+codeaura-{lang}-{theme}
+```
+
+The `{lang}` and `{theme}` placeholders are replaced with the active language and theme IDs at export time. For example, a TypeScript snippet styled with Tokyo Night downloads as `codeaura-typescript-tokyo-night.png`.
+
+<Note>
+You cannot change the filename template from the UI. If you need a custom name, rename the file after downloading or use the API.
+</Note>
+
+## Copying to clipboard
+
+Click **Copy to clipboard** in the Export menu to copy the rendered image directly as a bitmap. You can then paste it into any application that accepts image data — Slack, Notion, email clients, Figma, or a presentation tool.
+
+<Tip>
+Copy to clipboard uses the PNG format at the current scale setting. Set the scale to 2× before copying to ensure the image is sharp when pasted into HiDPI-aware applications.
+</Tip>
+
+## Shareable links
+
+Generate a permanent, publicly accessible link to your code image by clicking **Share** in the Export menu. CodeAura uploads a snapshot of your current configuration to the API and returns a short URL.
+
+<Steps>
+  <Step title="Open the Export menu">
+    Click the **Export** button in the top toolbar to open the export options.
+  </Step>
+  <Step title="Click Share">
+    Click **Share** to create a snapshot. CodeAura saves your code, theme, font, background, and frame settings to the server.
+  </Step>
+  <Step title="Copy the link">
+    The generated URL is copied to your clipboard automatically. Share it anywhere — in a tweet, a pull request comment, a chat message, or a documentation page.
+  </Step>
+</Steps>
+
+### Viewing a shared snapshot
+
+Shared images are accessible at:
+
+```
+https://codeaura.fun/s/:code
+```
+
+Where `:code` is the unique short identifier for the snapshot. Anyone with the link can view the image and see the original configuration.
+
+<Note>
+Snapshots are read-only for viewers. They can see the code and settings, but cannot edit the snapshot itself. To remix a shared snapshot, open the link and click **Open in editor** to load it into a new session.
+</Note>
+
+### Snapshot API
+
+If you need to create snapshots programmatically — for example from a CI pipeline or an editor extension — use the Snapshots API endpoint.
+
+<CardGroup cols={2}>
+  <Card title="Snapshots API" icon="link" href="/api/snapshots">
+    Create and retrieve snapshots via the REST API
+  </Card>
+  <Card title="API authentication" icon="key" href="/api/authentication">
+    Authenticate your API requests with a bearer token
+  </Card>
+</CardGroup>
+
+---
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Customizing your code image" icon="palette" href="/guides/customization">
+    Style your image before you export it
+  </Card>
+  <Card title="Session history and sync" icon="clock-rotate-left" href="/guides/history-and-sessions">
+    Find and re-export a previous design from your history
+  </Card>
+</CardGroup>

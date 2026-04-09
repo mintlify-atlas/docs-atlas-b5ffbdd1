@@ -1,0 +1,212 @@
+---
+title: "History API — manage saved code sessions"
+description: "List all saved history entries, sync local sessions to the server, and delete individual entries — all scoped to the authenticated user."
+---
+
+The History API lets authenticated users persist their code sessions across devices. Entries are scoped to the authenticated user — you will never see another user's history. All three endpoints require a valid Bearer token.
+
+<Info>
+  See the [authentication guide](/api/authentication) for how to obtain a Bearer token before calling these endpoints.
+</Info>
+
+---
+
+## List history
+
+```
+GET /history
+```
+
+Returns up to 100 history entries for the authenticated user, ordered most-recent first.
+
+### Response
+
+<ResponseField name="entries" type="object[]" required>
+  Array of history entry objects.
+
+  <Expandable title="entry properties">
+    <ResponseField name="id" type="string" required>
+      Database UUID of the history entry.
+    </ResponseField>
+    <ResponseField name="user_id" type="string" required>
+      UUID of the user who owns this entry.
+    </ResponseField>
+    <ResponseField name="sync_id" type="string" required>
+      Client-generated ID used as the upsert key during sync. Allows the same entry to be synced multiple times without duplication.
+    </ResponseField>
+    <ResponseField name="theme_id" type="string" required>
+      ID of the theme that was active when the session was saved.
+    </ResponseField>
+    <ResponseField name="language" type="string" required>
+      Programming language identifier for the session.
+    </ResponseField>
+    <ResponseField name="code_preview" type="string" required>
+      A short preview of the code content, used for display in the history list.
+    </ResponseField>
+    <ResponseField name="config" type="object" required>
+      The full visual configuration object associated with this session.
+    </ResponseField>
+    <ResponseField name="pinned" type="boolean" required>
+      Whether the user has pinned this entry to keep it at the top of the list.
+    </ResponseField>
+    <ResponseField name="created_at" type="string" required>
+      ISO 8601 timestamp. When synced from a client, this reflects the original local timestamp.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Example
+
+```bash
+curl --request GET \
+  --url https://your-domain/history \
+  --header "Authorization: Bearer <access_token>"
+```
+
+```json
+{
+  "entries": [
+    {
+      "id": "e9a12b3c-0011-4f2d-8c7a-1234abcd5678",
+      "user_id": "u1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "sync_id": "local-abc123",
+      "theme_id": "github-dark",
+      "language": "typescript",
+      "code_preview": "const greet = (name: string) =>",
+      "config": {
+        "themeId": "github-dark",
+        "fontId": "fira-code",
+        "fontSize": 14
+      },
+      "pinned": false,
+      "created_at": "2024-11-15T10:32:00.000Z"
+    }
+  ]
+}
+```
+
+---
+
+## Sync history
+
+```
+POST /history/sync
+```
+
+Upserts an array of history entries for the authenticated user. Entries are matched by `syncId` — sending the same `syncId` twice updates the existing record rather than creating a duplicate. Use this endpoint to push locally stored sessions up to the server.
+
+### Request body
+
+<ParamField body="entries" type="object[]" required>
+  Array of history entries to sync.
+
+  <Expandable title="entry properties">
+    <ParamField body="entries[].syncId" type="string" required>
+      Client-generated unique ID for the entry. Used as the upsert key to prevent duplicates across multiple sync calls.
+    </ParamField>
+    <ParamField body="entries[].themeId" type="string" required>
+      ID of the theme active during the session.
+    </ParamField>
+    <ParamField body="entries[].language" type="string" required>
+      Programming language identifier.
+    </ParamField>
+    <ParamField body="entries[].codePreview" type="string" required>
+      Short preview string of the code content for display purposes.
+    </ParamField>
+    <ParamField body="entries[].config" type="object" required>
+      Full visual configuration object for the session.
+    </ParamField>
+    <ParamField body="entries[].pinned" type="boolean" required>
+      Whether this entry is pinned by the user.
+    </ParamField>
+    <ParamField body="entries[].timestamp" type="number" required>
+      Unix timestamp (milliseconds) of when the session was created locally. Stored as the entry's `created_at` time.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Response
+
+<ResponseField name="synced" type="number" required>
+  The number of entries that were upserted in this request.
+</ResponseField>
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://your-domain/history/sync \
+  --header "Authorization: Bearer <access_token>" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "entries": [
+      {
+        "syncId": "local-abc123",
+        "themeId": "github-dark",
+        "language": "typescript",
+        "codePreview": "const greet = (name: string) =>",
+        "config": {
+          "themeId": "github-dark",
+          "fontId": "fira-code",
+          "fontSize": 14,
+          "lineHeight": 1.5,
+          "padding": 32,
+          "innerPadding": 16,
+          "borderRadius": 12,
+          "width": 800,
+          "windowStyle": "macos-dark",
+          "showLineNumbers": true,
+          "shadow": "0 20px 60px rgba(0,0,0,0.5)",
+          "bgType": "solid",
+          "bgColor": "#1a1b26",
+          "showTitle": false,
+          "windowTitle": ""
+        },
+        "pinned": false,
+        "timestamp": 1731664320000
+      }
+    ]
+  }'
+```
+
+```json
+{
+  "synced": 1
+}
+```
+
+---
+
+## Delete a history entry
+
+```
+DELETE /history/:id
+```
+
+Permanently deletes a single history entry. The entry must belong to the authenticated user — the server checks both the `id` and the `user_id`, so you cannot delete another user's entries.
+
+### Path parameters
+
+<ParamField path="id" type="string" required>
+  The database UUID of the history entry to delete.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean" required>
+  Always `true` when the delete succeeds. If the entry does not exist or belongs to another user, the server still returns `{ "success": true }` — no entry is deleted, but no error is raised.
+</ResponseField>
+
+### Example
+
+```bash
+curl --request DELETE \
+  --url https://your-domain/history/e9a12b3c-0011-4f2d-8c7a-1234abcd5678 \
+  --header "Authorization: Bearer <access_token>"
+```
+
+```json
+{
+  "success": true
+}
+```

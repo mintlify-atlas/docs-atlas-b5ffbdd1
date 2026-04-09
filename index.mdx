@@ -1,97 +1,52 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "CodeAura: Turn code snippets into stunning images"
+description: "CodeAura is a modern developer tool for generating beautiful, highly customizable code images and sharing them effortlessly with the world."
 ---
 
-## Setting up
+CodeAura transforms your code snippets into polished, shareable images — ideal for blog posts, social media, presentations, and documentation. With a live editor, deep customization controls, and one-click sharing, creating a stunning code image takes seconds.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Quick start" icon="rocket" href="/quickstart">
+    Create your first code image in under a minute
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Customization" icon="palette" href="/guides/customization">
+    Themes, backgrounds, fonts, and window styles
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Export & sharing" icon="share" href="/guides/export-and-sharing">
+    Download as PNG, SVG, WebP, or share a link
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="API reference" icon="code" href="/api/overview">
+    Integrate CodeAura snapshots into your own tools
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## How it works
 
-Everything you need to create world-class documentation.
+<Steps>
+  <Step title="Paste or type your code">
+    Open CodeAura and paste your snippet into the live editor. CodeAura automatically detects the programming language and applies syntax highlighting.
+  </Step>
+  <Step title="Customize the appearance">
+    Use the right-hand panels to choose a syntax theme, adjust the background, pick a font, and style the window frame to match your aesthetic.
+  </Step>
+  <Step title="Export or share">
+    Click **Export** to download a high-resolution image, copy it to your clipboard, or generate a shareable link that others can view and remix.
+  </Step>
+</Steps>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+## Key features
 
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<CardGroup cols={2}>
+  <Card title="20+ languages" icon="layer-group" href="/guides/editor">
+    Full syntax highlighting for JavaScript, TypeScript, Python, Rust, Go, and more
+  </Card>
+  <Card title="Rich themes" icon="swatchbook" href="/guides/customization">
+    Dozens of built-in themes including Dracula, Tokyo Night, Nord, and Solarized
+  </Card>
+  <Card title="Editor extensions" icon="plug" href="/extensions/vscode">
+    Create snapshots directly from VS Code or Zed without leaving your editor
+  </Card>
+  <Card title="Session history" icon="clock-rotate-left" href="/guides/history-and-sessions">
+    Your designs are auto-saved locally and synced across devices when signed in
+  </Card>
+</CardGroup>

@@ -1,0 +1,230 @@
+---
+title: "Customizing your code image"
+description: "Control every visual detail of your code image — syntax themes, backgrounds, window chrome, shadows, fonts, and ready-made presets."
+---
+
+CodeAura's four customization panels give you precise control over the look of every code image. Changes are applied live in the preview canvas so you can iterate quickly without a save step. The panels — **Theme**, **Background**, **Frame**, and **Font** — cover everything from syntax colours to drop-shadow intensity.
+
+## Theme panel
+
+The theme panel controls the syntax highlighting colours applied to your code. CodeAura ships with over 20 built-in themes organised into four categories. The default theme is **Tokyo Night**.
+
+You can also click **Randomize** to cycle to a random theme, or upload a custom theme if your preferred palette isn't listed.
+
+<Tabs>
+  <Tab title="Dark">
+    | Theme | Background |
+    |---|---|
+    | Dracula | `#282a36` |
+    | One Dark Pro | `#282c34` |
+    | Tokyo Night | `#1a1b26` |
+    | Tokyo Night Storm | `#24283b` |
+    | Catppuccin Mocha | `#1e1e2e` |
+    | Nord | `#2e3440` |
+    | Gruvbox Dark | `#282828` |
+    | Rosé Pine | `#191724` |
+    | Monokai Pro | `#2d2a2e` |
+    | Synthwave '84 | `#262335` |
+    | Ayu Dark | `#0a0e14` |
+    | Vesper | `#101010` |
+  </Tab>
+  <Tab title="Light">
+    | Theme | Background |
+    |---|---|
+    | GitHub Light | `#ffffff` |
+    | Solarized Light | `#fdf6e3` |
+    | Catppuccin Latte | `#eff1f5` |
+    | One Light | `#fafafa` |
+  </Tab>
+  <Tab title="High contrast">
+    | Theme | Background |
+    |---|---|
+    | GitHub Dark HC | `#0a0c10` |
+    | Pitch Black | `#000000` |
+    | Cobalt2 | `#193549` |
+  </Tab>
+  <Tab title="Retro">
+    | Theme | Background |
+    |---|---|
+    | Amber Terminal | `#1a1200` |
+    | Green Phosphor | `#001100` |
+    | Vaporwave | `#1a0a2e` |
+    | Hacker (Matrix) | `#000000` |
+  </Tab>
+</Tabs>
+
+<Tip>
+Light themes pair well with solid white or pastel backgrounds. Dark themes suit gradient or near-black backgrounds for maximum contrast.
+</Tip>
+
+---
+
+## Background panel
+
+The background sits behind the code window. Choose from three modes: **gradient**, **solid colour**, or **none** (transparent).
+
+### Gradient backgrounds
+
+The default mode. CodeAura includes a library of curated gradient presets organised by mood:
+
+<AccordionGroup>
+  <Accordion title="Neon">
+    Neon Purple, Electric Cyan, Laser Pink, Acid Green
+  </Accordion>
+  <Accordion title="Nature">
+    Aurora Borealis, Sunset Coast, Deep Ocean, Forest Mist
+  </Accordion>
+  <Accordion title="Retro">
+    Lo-Fi Vibes, Vaporwave Grid, Synthwave Sky, 80s Chrome
+  </Accordion>
+  <Accordion title="Moody">
+    Noir Smoke, Midnight Storm, Blood Moon
+  </Accordion>
+  <Accordion title="Pastel">
+    Cotton Candy, Lavender Dream, Mint Fresh
+  </Accordion>
+  <Accordion title="Lux">
+    Liquid Gold, Rose Gold, Champagne
+  </Accordion>
+  <Accordion title="Dark">
+    Abyss, Void, Obsidian, Carbon Black
+  </Accordion>
+  <Accordion title="Special">
+    Rainbow, Holographic, Oil Slick, Iridescent
+  </Accordion>
+</AccordionGroup>
+
+You can also enter a custom CSS gradient string directly, and adjust the **gradient angle** (0–360°).
+
+### Solid colour
+
+Pick any hex or RGBA colour as the background. The **opacity** slider lets you dial the background from fully transparent to fully opaque.
+
+### Transparent (none)
+
+Removes the background entirely. The exported image will have a transparent canvas when you export to PNG or WebP and enable the **Transparent background** export option.
+
+<Note>
+JPEG does not support transparency. If you choose the `none` background and export to JPEG, CodeAura renders the background as white.
+</Note>
+
+---
+
+## Frame panel
+
+The frame panel controls the window chrome, sizing, border, and shadow that surround your code.
+
+### Window style
+
+Choose the decorative chrome drawn around the code block:
+
+| Style | Description |
+|---|---|
+| `macos-dark` | macOS-style traffic lights on a dark title bar (default) |
+| `macos-light` | macOS-style traffic lights on a light title bar |
+| `windows-11` | Windows 11 title bar with window control icons |
+| `terminal` | Minimal terminal header with a prompt indicator |
+| `minimal` | Thin border strip with no window controls |
+| `none` | No frame — plain code block only |
+
+### Traffic light style
+
+When using a macOS window style, you can set the traffic light buttons to `colored` (default red/amber/green), `monochrome`, `outlined`, or `hidden`.
+
+### Window title
+
+The title shown in the frame header. Defaults to `untitled`. Set it to a real file name for a more realistic look. You can toggle title visibility and align it to `left` or `center`.
+
+### Padding and sizing
+
+| Setting | Default | Description |
+|---|---|---|
+| Outer padding | `48px` | Space between the image edge and the window chrome |
+| Inner padding | `20px` | Space between the window chrome and the code text |
+| Border radius | `12px` | Corner rounding on the window frame |
+| Width | `720px` | Fixed canvas width |
+| Auto height | `true` | Expands the canvas to fit the code content |
+
+### Border
+
+Add an optional border around the window frame. Set **border width** (default `0`) and **border colour** (default `rgba(255,255,255,0.1)`).
+
+### Shadow
+
+Control the drop shadow beneath the window frame. Pick from named shadow presets or enter a raw CSS `box-shadow` value.
+
+The default shadow is `dramatic`: `0 20px 60px rgba(0,0,0,0.5)`.
+
+### Line numbers
+
+| Setting | Default | Description |
+|---|---|---|
+| Show line numbers | `true` | Renders line numbers in the gutter |
+| Line number start | `1` | First line number displayed |
+| Highlighted lines | `""` | Comma-separated or range notation (e.g. `3,5-8`) |
+| Focus dim opacity | `40%` | Opacity of non-highlighted lines when highlight is active |
+
+---
+
+## Font panel
+
+The font panel controls the typeface, size, weight, and spacing of the code text.
+
+### Available fonts
+
+All fonts are developer-friendly monospace typefaces. Fonts marked with a ligature indicator support programming ligatures (e.g. `=>`, `!==`, `->` rendered as single glyphs).
+
+| Font | Ligatures | Weights |
+|---|---|---|
+| Fira Code *(default)* | Yes | 300, 400, 500, 700 |
+| JetBrains Mono | Yes | 300, 400, 500, 700 |
+| Cascadia Code | Yes | 300, 400, 600, 700 |
+| Victor Mono | Yes | 300, 400, 500, 700 |
+| Source Code Pro | No | 300, 400, 500, 700 |
+| IBM Plex Mono | No | 300, 400, 500, 700 |
+| Inconsolata | No | 300, 400, 500, 700 |
+| Space Mono | No | 400, 700 |
+| DM Mono | No | 300, 400, 500 |
+| Hack | No | 400, 700 |
+| Anonymous Pro | No | 400, 700 |
+| Courier Prime | No | 400, 700 |
+
+### Font settings
+
+| Setting | Default | Description |
+|---|---|---|
+| Font size | `14px` | Base size for all code text |
+| Line height | `1.7` | Vertical spacing between lines |
+| Letter spacing | `0` | Additional horizontal spacing between characters |
+| Font weight | `400` | Thickness of the rendered glyphs |
+| Ligatures | `true` | Enable or disable programming ligatures |
+
+---
+
+## Presets
+
+Presets combine all four panels into a single named configuration. Apply a preset to instantly jump to a polished look, then tweak individual settings from there.
+
+| Preset | Theme | Font | Window | Background |
+|---|---|---|---|---|
+| Minimal Ghost | GitHub Light | Source Code Pro | none | Solid white |
+| Dracula Night | Dracula | Fira Code | macos-dark | Gradient |
+| Sunset Hacker | Ayu Dark | JetBrains Mono | terminal | Gradient |
+| Rosé Studio | Rosé Pine | Victor Mono | macos-dark | Gradient |
+| Retro Terminal | Amber Terminal | Hack | terminal | Solid |
+| Tokyo Neon | Tokyo Night | Fira Code | macos-dark | Gradient |
+| Clean Docs | GitHub Light | Source Code Pro | minimal | Solid |
+| Hacker News | Vesper | IBM Plex Mono | none | Solid |
+
+---
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Writing and editing code" icon="pen-to-square" href="/guides/editor">
+    Set up your code snippet before styling it
+  </Card>
+  <Card title="Exporting and sharing" icon="share" href="/guides/export-and-sharing">
+    Download your finished image or share a link
+  </Card>
+</CardGroup>

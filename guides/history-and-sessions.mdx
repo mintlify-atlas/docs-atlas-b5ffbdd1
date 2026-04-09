@@ -1,0 +1,139 @@
+---
+title: "Session history and cross-device sync"
+description: "CodeAura automatically saves your work to local history, pins important entries, and syncs everything across devices when you sign in."
+---
+
+CodeAura saves your work automatically as you go. Every significant change creates or updates a history entry, giving you a timestamped record of your code images without any manual save step. Sign in to push that history to the cloud and access it from any device.
+
+## How automatic saving works
+
+CodeAura uses a **smart session** strategy to decide whether a change should create a new history entry or silently update the current one.
+
+<Tabs>
+  <Tab title="New entry created">
+    A brand-new history entry is created when you make a **content or language change**:
+
+    - Pasting or typing new code
+    - Switching the programming language
+
+    These are considered distinct creative sessions and are saved as separate entries with a new timestamp.
+  </Tab>
+  <Tab title="Current entry updated">
+    The most recent entry is **updated in place** — without creating a duplicate — when you adjust **style settings** only:
+
+    - Changing the theme, background, or font
+    - Adjusting padding, shadow, or window style
+    - Toggling line numbers or indent guides
+
+    This prevents minor visual tweaks from flooding your history with near-identical entries.
+  </Tab>
+</Tabs>
+
+<Note>
+If the most recent history entry is **pinned**, CodeAura will never mutate it. Instead, any change that would normally update it creates a new entry instead, keeping your pinned work intact.
+</Note>
+
+## History storage
+
+History is stored in your browser's **IndexedDB** database. This means:
+
+- History is available immediately, even with no internet connection.
+- History is scoped to the browser and device where you created it.
+- Up to **50 entries** are retained. When the limit is reached, the oldest unpinned entry is removed automatically to make room for the new one. Pinned entries are never evicted.
+
+## Viewing the history panel
+
+Click the **History** icon in the toolbar to open the history panel. Each entry shows:
+
+- A preview of the code snippet
+- The programming language and theme used
+- A timestamp
+- A pin icon to mark it as important
+
+Click any entry to restore it to the editor, including all style settings at the time it was saved.
+
+## Pinning entries
+
+Pin an entry to protect it from automatic eviction and mark it for easy retrieval.
+
+<Steps>
+  <Step title="Open the history panel">
+    Click the **History** icon in the top toolbar.
+  </Step>
+  <Step title="Find the entry to pin">
+    Scroll through the list to find the entry you want to keep permanently.
+  </Step>
+  <Step title="Click the pin icon">
+    Click the pin icon on the entry card. A filled pin indicates the entry is protected. Click it again to unpin.
+  </Step>
+</Steps>
+
+Pinned entries:
+
+- Are never removed when the 50-entry limit is reached.
+- Are not deleted when you use **Clear history**.
+- Are synced to the server with priority when you sign in.
+
+## Clearing history
+
+Click **Clear history** in the history panel to remove all unpinned entries. Pinned entries are left untouched. This action removes entries from IndexedDB immediately and cannot be undone for unsynced sessions.
+
+## Cross-device sync
+
+By default, history lives only in the browser where it was created. Sign in to your CodeAura account to sync history to the server and access it from any device.
+
+### How sync works
+
+<Steps>
+  <Step title="Sign in">
+    Click **Sign in** in the top-right corner and authenticate with your account. CodeAura uses your access token to identify unsynced entries.
+  </Step>
+  <Step title="Initial sync">
+    On first sign-in, CodeAura automatically pushes all local entries that have never been synced to the server. Each entry is identified by a unique `syncId` (a UUID) so duplicates are never created if you sign in from multiple browsers.
+  </Step>
+  <Step title="Ongoing sync">
+    After the initial push, new entries and updates are synced to the server in the background. Entries show a sync indicator once they have been confirmed by the server.
+  </Step>
+  <Step title="Access from another device">
+    Sign in on a second device and your synced history is pulled down automatically. Any local-only entries on that device are merged with your cloud history.
+  </Step>
+</Steps>
+
+<Note>
+Sync requires an active internet connection. If a sync attempt fails, CodeAura retries silently in the background — no entries are lost. Local IndexedDB always acts as the source of truth when offline.
+</Note>
+
+### Sync status indicators
+
+Each history entry carries a sync status:
+
+| Status | Meaning |
+|---|---|
+| Unsynced | Saved locally only. Will be pushed on next sync. |
+| Synced | Confirmed by the server and available on all signed-in devices. |
+
+### History API
+
+Signed-in users can also read and manage history entries via the REST API:
+
+<CardGroup cols={2}>
+  <Card title="History API" icon="clock-rotate-left" href="/api/history">
+    List, retrieve, and delete history entries via the REST API
+  </Card>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Obtain an access token to make authenticated API requests
+  </Card>
+</CardGroup>
+
+---
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Exporting and sharing" icon="share" href="/guides/export-and-sharing">
+    Download or share a code image from any history entry
+  </Card>
+  <Card title="Writing and editing code" icon="pen-to-square" href="/guides/editor">
+    Learn how the editor and language detection work
+  </Card>
+</CardGroup>
